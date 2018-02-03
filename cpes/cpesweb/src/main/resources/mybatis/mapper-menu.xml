@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.liang.cpes.dao.MenuDao">
+	<select id="queryParentMenu" resultType="com.liang.cpes.bean.T_Menu">
+		select * from t_menu 
+		where pid = 0
+	</select>
+	
+	<select id="queryChildMenu" parameterType="int" resultType="com.liang.cpes.bean.T_Menu">
+		select * from t_menu 
+		where pid = #{pid}
+	</select>
+	
+	<select id="queryAll"	resultType="com.liang.cpes.bean.T_Menu">
+		select * from t_menu 
+	</select>
+	
+</mapper>

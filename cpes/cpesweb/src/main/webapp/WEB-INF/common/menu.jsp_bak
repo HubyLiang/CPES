@@ -1,0 +1,27 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+<ul style="padding-left:0px;" class="list-group">
+    <c:forEach items="${menus}" var="parent" >
+        <c:if test="${empty parent.childMenus}">
+			<li class="list-group-item tree-closed" >
+				<a href="${pageContext.request.contextPath}${parent.url}"> ${parent.name}</a> 
+			</li>
+        </c:if>
+        <c:if test="${not empty parent.childMenus}">
+			<li class="list-group-item tree-closed">
+				<span> ${parent.name} <span class="badge" style="float:right">${fn:length(parent.childMenus)}</span></span> 
+				<ul style="margin-top:10px;display:none;">
+					<c:forEach items="${parent.childMenus}" var="child">
+						<li style="height:30px;">
+							<a href="${pageContext.request.contextPath}${child.url}"> ${child.name} </a>
+						</li>
+					</c:forEach>
+				</ul>
+			</li>
+        </c:if>
+    </c:forEach>
+</ul>

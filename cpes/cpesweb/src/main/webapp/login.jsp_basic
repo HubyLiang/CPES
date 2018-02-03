@@ -1,0 +1,68 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>用户登录</title>
+</head>
+<body>
+	<h2>用户登录</h2>
+	<form id="login_form" action="userLogin.do" method="post">
+		<input id="loginacct" name="loginacct" type="text" placeholder="请输入登录账号"><br>
+		<input id="userpswd" name="userpswd" type="text" placeholder="请输入密码"><br>
+		<select id="user_type">
+			<option value="member">前台用户</option>
+			<option value="user">后台管理</option>
+		</select><br>
+		<input id="loginBtn" type="submit" value="登陆"> <br>
+	</form>
+	
+	<script type="text/javascript" src="${pageContext.request.contextPath}/jquery/jquery-1.7.2.js"></script>
+	<script type="text/javascript">
+	
+		$("#loginBtn").click(function(){
+			var loginacct = $("#loginacct");
+			if(loginacct.val() == ""){
+				alert("用户名不能为空");
+				return false;
+			}
+			var userpswd = $("#userpswd");
+			if(userpswd.val() == ""){
+				alert("密码不能为空");
+				return false;
+			}
+			
+			var user_type = $("#user_type").val();
+			
+			data = {"loginacct" : loginacct.val() , "userpswd" : userpswd.val()}
+			
+			var paramObj = {
+					url		:	"${pageContext.request.contextPath}/userLogin.do",
+					type	:	"POST",
+					data	:	data,
+					success	:	function(result){
+						if(result.success){
+							if(user_type == "member"){
+								alert("member continue");
+								return false;
+							}else{
+								window.location.href="${pageContext.request.contextPath}/main.htm";
+							}
+						}else{
+							alert(result.errMsg);
+							return false;
+						}
+					}
+			}
+			$.ajax(paramObj);
+			
+		})
+	</script>
+	
+	
+</body>
+</html>

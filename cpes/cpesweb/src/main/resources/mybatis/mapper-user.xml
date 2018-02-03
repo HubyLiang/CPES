@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.liang.cpes.dao.UserDao">
+	<select id="checkLoginacctAndPassword" parameterType="com.liang.cpes.bean.T_User" resultType="com.liang.cpes.bean.T_User">
+		select * from t_user 
+		where
+		loginacct = #{loginacct}
+		and
+		userpswd = #{userpswd}
+	</select>
+	
+	<select id="queryUser4Page" parameterType="Map" resultType="com.liang.cpes.bean.T_User">
+		select * from t_user 
+		<where>
+			<if test="querytext != null">
+				and loginacct like concat('%',#{querytext},'%') escape '#'
+			</if>
+		</where>
+		limit
+		#{start},#{size}		 
+	</select>
+	
+	<select id="queryUserCount4Page" resultType="int">
+		select count(*) from t_user
+		<where>
+			<if test="querytext != null">
+				and loginacct like concat('%',#{querytext},'%') escape '#'
+			</if>
+		</where>
+	</select>
+	
+	<select id="queryUserById" parameterType="int" resultType="com.liang.cpes.bean.T_User">
+		select * from t_user where id = #{id}
+	</select>
+	
+	<select id="queryAssignRolesByUserId" parameterType="int" resultType="int">
+		select roleid from t_user_role 
+		where userid = #{userid}
+	</select>
+	
+	<insert id="insertUser" parameterType="com.liang.cpes.bean.T_User">
+		insert into t_user(loginacct,userpswd,username,email,photo)
+		values(#{loginacct},#{userpswd},#{username},#{email},#{photo})
+	</insert>
+	
+	<insert id="insertUserRole" parameterType="Map">
+		insert into t_user_role (
+            userid, roleid
+        ) values (
+            #{userid}, #{roleid}
+        )
+	</insert>
+	
+	<update id="updateUserById" parameterType="com.liang.cpes.bean.T_User">
+		update t_user
+        set
+            loginacct = #{loginacct},
+            username = #{username},
+            email = #{email}
+        where id = #{id}
+	</update>
+	
+	<delete id="deleteUserById" parameterType="int">
+		delete from t_user where id = #{id}
+	</delete>
+	
+	<delete id="deleteUsers" parameterType="com.liang.cpes.bean.Datas">
+		delete from t_user where id in
+		<foreach collection="ids" item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<delete id="deleteUserRoles" parameterType="Map">
+		delete from t_user_role where userid = #{userid} and roleid in
+        <foreach collection="roleids" item="id" open="(" close=")" separator=",">
+        #{id}
+        </foreach>
+	</delete>
+	
+</mapper>

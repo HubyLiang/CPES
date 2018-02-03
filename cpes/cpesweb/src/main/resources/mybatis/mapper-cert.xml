@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.liang.cpes.dao.CertDao">
+	<select id="queryCertPage" resultType="com.liang.cpes.bean.T_Cert" parameterType="Map">
+		select * from t_cert
+		<where>
+			<if test="querytext != null">
+				and name like concat('%',#{querytext},'%') escape '#'
+			</if>
+		</where>
+		limit
+		#{start},#{size}	
+	</select>
+	
+	<select id="queryCertCount" parameterType="Map" resultType="int">
+		select count(*) from t_cert
+		<where>
+			<if test="querytext != null">
+				and name like concat('%',#{querytext},'%') escape '#'
+			</if>
+		</where>
+	</select>
+	
+	<select id="queryCertById" resultType="com.liang.cpes.bean.T_Cert">
+		select * from t_cert where id = #{id}
+	</select>
+	
+	<select id="queryAllCert" resultType="com.liang.cpes.bean.T_Cert">
+		select * from t_cert
+	</select>
+	
+	<select id="queryAccCerts" resultType="com.liang.cpes.bean.AcctCert">
+		select *
+		from t_acct_cert
+	</select>
+	
+	<insert id="insertAccCert" parameterType="Map">
+		insert into t_acct_cert (
+            acctype,certid
+        ) values (
+            #{acctype},#{certid}
+        )
+	</insert>
+	
+	<insert id="insertCert" parameterType="com.liang.cpes.bean.T_Cert">
+		insert into t_cert(name) values(#{name})
+	</insert>
+	
+	<update id="updateCert" parameterType="com.liang.cpes.bean.T_Cert">
+		update t_cert
+		set
+			name=#{name}
+		where 
+			id=#{id}
+	</update>
+	
+	<delete id="deleteCert" parameterType="int">
+		delete from t_cert where id = #{id}
+	</delete>
+	
+	<delete id="deleteCerts" parameterType="com.liang.cpes.bean.Datas">
+		delete from t_cert where id in
+		<foreach collection="ids" item="id" open="(" close=")" separator=",">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<delete id="deleteAccCert" parameterType="Map">
+		 delete from t_acct_cert where acctype = #{acctype} and certid = #{certid}
+	</delete>
+	
+</mapper>
