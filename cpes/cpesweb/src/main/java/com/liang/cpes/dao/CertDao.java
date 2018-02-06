@@ -31,4 +31,6 @@ public interface CertDao {
 
 	void deleteAccCert(Map<String, Object> paramMap);
 
+	List<T_Cert> queryCertsByMemberAccttype(String accttype);
+
 }

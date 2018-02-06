@@ -76,15 +76,21 @@
 			
 			dataObj = {"loginacct" : loginacct.val() , "userpswd" : userpswd.val()}
 			
+			var url = "";
+			if(user_type == 'member'){
+				url = "${pageContext.request.contextPath}/memberLogin.do";
+			}else if(user_type == 'user'){
+				url = "${pageContext.request.contextPath}/userLogin.do";
+			}
+			
 			var paramObj = {
-					url		:	"${pageContext.request.contextPath}/userLogin.do",
+					url		:	url,
 					type	:	"POST",
 					data	:	dataObj,
 					success	:	function(result){
 						if(result.success){
 							if(user_type == "member"){
-								alert("member continue");
-								return false;
+								window.location.href="${pageContext.request.contextPath}/member.htm";
 							}else{
 								window.location.href="${pageContext.request.contextPath}/main.htm";
 							}

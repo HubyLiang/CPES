@@ -30,4 +30,6 @@ public interface CertService {
 
 	void deleteAccCert(Map<String, Object> paramMap);
 
+	List<T_Cert> queryCertsByMemberAccttype(String accttype);
+
 }

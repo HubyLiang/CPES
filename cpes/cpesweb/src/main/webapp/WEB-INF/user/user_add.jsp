@@ -29,7 +29,7 @@
 	
 	<%@include file="/WEB-INF/common/head.jsp" %>
 
-	    <div class="container-fluid">
+    <div class="container-fluid">
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
 			<div class="tree">

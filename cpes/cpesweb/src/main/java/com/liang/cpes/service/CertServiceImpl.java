@@ -66,4 +66,8 @@ public class CertServiceImpl implements CertService {
 		certDao.deleteAccCert(paramMap);
 	}
 
+	public List<T_Cert> queryCertsByMemberAccttype(String accttype) {
+		return certDao.queryCertsByMemberAccttype(accttype);
+	}
+
 }

@@ -14,7 +14,7 @@ public class MyFileUploadUtil {
 		for(int i = 0;i<files.length;i++){
 			try {
 				String originalFilename =  System.currentTimeMillis()+files[i].getOriginalFilename();
-				files[i].transferTo(new File("D:\\MyWork\\CPES\\cpes\\cpesweb\\src\\main\\webapp\\upload"+originalFilename));
+				files[i].transferTo(new File("/home/bonjour/mywork/CPES/cpes/cpesweb/src/main/webapp/upload"+originalFilename));
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -28,7 +28,7 @@ public class MyFileUploadUtil {
 		List<String> imgList = new ArrayList<String>();
 			try {
 				String originalFilename =  System.currentTimeMillis()+file.getOriginalFilename();
-				file.transferTo(new File("D:\\MyWork\\CPES\\cpes\\cpesweb\\src\\main\\webapp\\upload"+originalFilename));
+				file.transferTo(new File("/home/bonjour/mywork/CPES/cpes/cpesweb/src/main/webapp/upload"+originalFilename));
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
 			} catch (IOException e) {

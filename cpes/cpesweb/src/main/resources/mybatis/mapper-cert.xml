@@ -24,6 +24,18 @@
 		</where>
 	</select>
 	
+	<select id="queryCertsByMemberAccttype" parameterType="java.lang.String" resultType="com.liang.cpes.bean.T_Cert">
+        select
+            *
+        from t_cert
+        where id in (
+            select
+                certid
+            from t_acct_cert
+            where acctype = #{accttype}
+        )		
+	</select>
+	
 	<select id="queryCertById" resultType="com.liang.cpes.bean.T_Cert">
 		select * from t_cert where id = #{id}
 	</select>
