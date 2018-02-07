@@ -1,7 +1,9 @@
 package com.liang.cpes.dao;
 
+import java.util.List;
 import java.util.Map;
 
+import com.liang.cpes.bean.T_Cert;
 import com.liang.cpes.bean.T_Member;
 import com.liang.cpes.bean.T_Ticket;
 
@@ -28,5 +30,11 @@ public interface MemberDao {
 	T_Ticket queryTicketByPiid(String piid);
 
 	T_Member queryMemberById(int memberid);
+
+	List<T_Cert> queryCertsByMemberId(Integer memberid);
+
+	void updateMemberStatus(Integer memberid);
+
+	void updateTicketAuthStatus(T_Ticket t_Ticket);
 
 }

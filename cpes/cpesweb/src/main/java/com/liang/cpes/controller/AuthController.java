@@ -12,10 +12,13 @@ import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.liang.cpes.bean.Page;
+import com.liang.cpes.bean.T_Cert;
 import com.liang.cpes.bean.T_Member;
 import com.liang.cpes.bean.T_Ticket;
 import com.liang.cpes.common.BaseController;
@@ -35,6 +38,39 @@ public class AuthController extends BaseController {
 	@RequestMapping("/index")
 	public String index() {
 		return "auth/auth_index";
+	}
+	
+	@RequestMapping(value="/show")
+	public String show(String taskId,Integer memberid,Model model){
+		List<T_Cert> certs = memberService.queryCertsByMemberId(memberid);
+		model.addAttribute("memberid", memberid);
+		model.addAttribute("taskId", taskId);
+		model.addAttribute("certs", certs);
+		return "auth/auth_show";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/verify",method=RequestMethod.POST)
+	public Object verify(String taskId,Integer memberid){
+		start();
+		try {
+			//更新会员实名认证状态
+			memberService.updateMemberStatus(memberid);
+			
+			//流程执行完毕
+			taskService.complete(taskId);
+			
+			//修改流程审批单的审批状态
+			T_Ticket t_Ticket = memberService.queryTicketByMemberId(memberid);
+			t_Ticket.setAuthstatus("1");
+			memberService.updateTicketAuthStatus(t_Ticket);
+			success(true);
+		} catch (Exception e) {
+			success(false);
+			e.printStackTrace();
+		}
+		
+		return end();
 	}
 	
 	@ResponseBody

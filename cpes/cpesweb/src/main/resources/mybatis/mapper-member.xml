@@ -31,6 +31,14 @@
         from t_member
         where id = #{id}
     </select>
+    
+    <select id="queryCertsByMemberId" resultType="com.liang.cpes.bean.T_Cert">
+        select
+            a.*,
+            b.iconpath
+        from t_cert a
+        join t_member_cert b on a.id = b.certid and memberid = #{memberid}
+    </select>
 	
 	<insert id="insertTicket" parameterType="com.liang.cpes.bean.T_Ticket">
 		 insert into t_ticket (memberid,authstatus) values (#{memberid},#{authstatus})
@@ -76,89 +84,16 @@
         where id = #{id}
 	</update>
 	
-<!-- 	
-   <select id="queryCertsByMemberId" resultType="cert">
-        select
-            a.*,
-            b.iconpath
-        from t_cert a
-        join t_member_cert b on a.id = b.certid and memberid = #{memberid}
-    </select>
-
-    <select id="queryTicketByPiid" resultType="ticket">
-        select
-            *
-        from t_ticket
-        where piid = #{piid}
-    </select>
-
-    <select id="queryMemberById" resultType="member">
-        select
-            *
-        from t_member
-        where id = #{id}
-    </select>
-
-    <select id="queryTicketByMemberId" resultType="ticket">
-        select
-           *
-        from t_ticket
-        where memberid = #{memberid}
-    </select>
-    
-    <insert id="insertTicket">
-        insert into t_ticket (memberid,authstatus) values (#{memberid},#{authstatus})
-    </insert>
-    
-    <insert id="insertMemberCert">
-        insert into t_member_cert (
-            memberid,certid,iconpath
-        ) values (
-            #{memberid},#{certid},#{iconpath}
-        )
-    </insert>
-    
-    <update id="updateMemberStatus">
+	<update id="updateMemberStatus">
         update t_member
         set status = '1'
         where id = #{id}
-    </update>
-    
-    <update id="updateTicketAuthStatus">
+	</update>
+	
+	<update id="updateTicketAuthStatus" parameterType="com.liang.cpes.bean.T_Ticket">
         update t_ticket
         set authstatus = #{authstatus}
-        where id = #{id}
-    </update>
-    
-    <update id="updateTicket">
-        update t_ticket
-        set
-            processstep = #{processstep},
-            authcode = #{authcode},
-            piid = #{piid}
-        where id = #{id}
-    </update>
-    
-    <update id="updateMemberEmail">
-        update t_member set email = #{email} where id = #{id}
-    </update>
-    
-    <update id="updateTicketProcessStep">
-        update t_ticket set processstep = #{processstep} where id = #{id}
-    </update>
-    
-    <update id="updateMemberBasicInfo">
-        update t_member
-        set
-            realname = #{realname},
-            cardno = #{cardno},
-            tel = #{tel}
-        where id = #{id}
-    </update>
-    
-    <update id="updateMemberAccttype">
-        update t_member
-        set accttype = #{accttype}
-        where id = #{id}
-    </update> -->
+        where id = #{id}		
+	</update>
+	
 </mapper> 

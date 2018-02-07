@@ -157,7 +157,7 @@ public class MemberController extends BaseController {
 				String fileName = UUID.randomUUID().toString();
 				String fn = file.getOriginalFilename();
 				fileName = fileName + fn.substring(fn.lastIndexOf("."));
-				String dir = session.getServletContext().getRealPath("upload/certimg");
+				String dir = session.getServletContext().getRealPath("upload");
 				String path = dir + File.separator + fileName;
 				
 //				InputStream in = file.getInputStream();
@@ -222,10 +222,10 @@ public class MemberController extends BaseController {
 			varMap.put("authcode", authcode);
 			varMap.put("userid", loginMember.getLoginacct());
 
-//			ProcessInstance pi = runtimeService.startProcessInstanceById(pd.getId(), varMap);
+			ProcessInstance pi = runtimeService.startProcessInstanceById(pd.getId(), varMap);
 			T_Ticket t = memberService.queryTicketByMemberId(loginMember.getId());
 			t.setProcessstep("checkemail");
-//			t.setPiid(pi.getId());
+			t.setPiid(pi.getId());
 			t.setAuthcode(authcode);
 			memberService.updateTicket(t);
 			success(true);
@@ -251,11 +251,11 @@ public class MemberController extends BaseController {
 			if ( authcode.equals(t.getAuthcode()) ) {
 				// 让审批流程继续执行
 				// 完成当前会员的验证任务
-//				TaskQuery query = taskService.createTaskQuery();
-//				List<Task> ts = query.taskAssignee(loginMember.getLoginacct()).list();
-//				for ( Task task : ts ) {
-//					taskService.complete(task.getId());
-//				}
+				TaskQuery query = taskService.createTaskQuery();
+				List<Task> ts = query.taskAssignee(loginMember.getLoginacct()).list();
+				for ( Task task : ts ) {
+					taskService.complete(task.getId());
+				}
 				t.setProcessstep("confirm");
 				memberService.updateTicketProcessStep(t);
 				success(true);
@@ -270,6 +270,5 @@ public class MemberController extends BaseController {
 		
 		return end();
 	}
-
-
+	
 }

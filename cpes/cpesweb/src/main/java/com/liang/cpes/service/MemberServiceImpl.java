@@ -1,10 +1,12 @@
 package com.liang.cpes.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.liang.cpes.bean.T_Cert;
 import com.liang.cpes.bean.T_Member;
 import com.liang.cpes.bean.T_Ticket;
 import com.liang.cpes.dao.MemberDao;
@@ -59,5 +61,17 @@ public class MemberServiceImpl implements MemberService {
 
 	public T_Member queryMemberById(int memberid) {
 		return memberDao.queryMemberById(memberid);
+	}
+
+	public List<T_Cert> queryCertsByMemberId(Integer memberid) {
+		return memberDao.queryCertsByMemberId(memberid);
+	}
+
+	public void updateMemberStatus(Integer memberid) {
+		memberDao.updateMemberStatus(memberid);
+	}
+
+	public void updateTicketAuthStatus(T_Ticket t_Ticket) {
+		memberDao.updateTicketAuthStatus(t_Ticket);
 	}
 }
