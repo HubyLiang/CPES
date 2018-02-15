@@ -37,4 +37,8 @@ public interface MemberService {
 
 	void updateTicketAuthStatus(T_Ticket t_Ticket);
 
+	int regist(T_Member member);
+
+	T_Member checkLoginAcct(String loginacct);
+
 }

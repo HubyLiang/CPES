@@ -39,6 +39,10 @@
         from t_cert a
         join t_member_cert b on a.id = b.certid and memberid = #{memberid}
     </select>
+    
+    <select id="checkLoginAcct" parameterType="java.lang.String" resultType="com.liang.cpes.bean.T_Member">
+    	select * from t_member where loginacct = #{loginacct}
+    </select>
 	
 	<insert id="insertTicket" parameterType="com.liang.cpes.bean.T_Ticket">
 		 insert into t_ticket (memberid,authstatus) values (#{memberid},#{authstatus})
@@ -50,6 +54,10 @@
         ) values (
             #{memberid},#{certid},#{iconpath}
         )		
+	</insert>
+	
+	<insert id="regist" parameterType="com.liang.cpes.bean.T_Member">
+		insert into t_member(loginacct,userpswd,status,username) values (#{loginacct},#{userpswd},0,#{username})
 	</insert>
   	
 	

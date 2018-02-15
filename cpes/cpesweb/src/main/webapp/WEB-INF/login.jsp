@@ -90,12 +90,12 @@
 					success	:	function(result){
 						if(result.success){
 							if(user_type == "member"){
-								window.location.href="${pageContext.request.contextPath}/member.htm";
+								window.location.href="${pageContext.request.contextPath}/memberindex.htm";
 							}else{
 								window.location.href="${pageContext.request.contextPath}/main.htm";
 							}
 						}else{
-							alert(result.errMsg);
+							alert(result.error);
 							return false;
 						}
 					}

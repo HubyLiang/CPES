@@ -48,15 +48,54 @@ public class MemberController extends BaseController {
 
 	@Autowired
 	private CertService certService;
-	
+
 	@Autowired
 	private RepositoryService repositoryService;
-	
+
 	@Autowired
 	private RuntimeService runtimeService;
-	
+
 	@Autowired
 	private TaskService taskService;
+
+	@ResponseBody
+	@RequestMapping(value="/checkLoginAcct",method=RequestMethod.POST)
+	public Object checkLoginAcct(String loginacct) {
+		start();
+		try {
+			T_Member memberdb = memberService.checkLoginAcct(loginacct);
+			
+			if (memberdb != null) {
+				success(false);
+			} else {
+				success(true);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return end();
+	}
+
+	@ResponseBody
+	@RequestMapping(value = "/regist", method = RequestMethod.POST)
+	public Object regist(T_Member member) {
+		start();
+
+		try {
+			int n = memberService.regist(member);
+			if (n == 1) {
+				success(true);
+			} else {
+				success(false);
+			}
+		} catch (Exception e) {
+			success(false);
+			e.printStackTrace();
+		}
+
+		return end();
+	}
 
 	@ResponseBody
 	@RequestMapping(value = "/updateMemberAccttype", method = RequestMethod.POST)
@@ -78,7 +117,7 @@ public class MemberController extends BaseController {
 
 		return end();
 	}
-	
+
 	@RequestMapping(value = "/apply")
 	public String apply(HttpSession session, T_Member member, Model model) {
 
@@ -117,12 +156,12 @@ public class MemberController extends BaseController {
 
 	@ResponseBody
 	@RequestMapping("/updateMemberBasicInfo")
-	public Object updateMemberBasicInfo( T_Member member, HttpSession session ) {
+	public Object updateMemberBasicInfo(T_Member member, HttpSession session) {
 		start();
-		
+
 		try {
-			T_Member loginMember = (T_Member)session.getAttribute(Const.LOGIN_MEMBER);
-			//member.setId(loginMember.getId());
+			T_Member loginMember = (T_Member) session.getAttribute(Const.LOGIN_MEMBER);
+			// member.setId(loginMember.getId());
 			loginMember.setRealname(member.getRealname());
 			loginMember.setCardno(member.getCardno());
 			loginMember.setTel(member.getTel());
@@ -131,14 +170,14 @@ public class MemberController extends BaseController {
 			t.setProcessstep("basicinfo");
 			memberService.updateTicketProcessStep(t);
 			success(true);
-		} catch ( Exception e ) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			success(false);
 		}
-		
+
 		return end();
 	}
-	
+
 	@ResponseBody
 	@RequestMapping(value = "/uploadCertFile", method = RequestMethod.POST)
 	public Object uploadCertFile(HttpServletRequest req) {
@@ -159,19 +198,19 @@ public class MemberController extends BaseController {
 				fileName = fileName + fn.substring(fn.lastIndexOf("."));
 				String dir = session.getServletContext().getRealPath("upload");
 				String path = dir + File.separator + fileName;
-				
-//				InputStream in = file.getInputStream();
-//				FileOutputStream out = new FileOutputStream(new File(path));
-//				int i =0;
-//				while((i = in.read()) != -1){
-//					out.write(i);
-//				}
-//				in.close();
-//				out.close();
-				
+
+				// InputStream in = file.getInputStream();
+				// FileOutputStream out = new FileOutputStream(new File(path));
+				// int i =0;
+				// while((i = in.read()) != -1){
+				// out.write(i);
+				// }
+				// in.close();
+				// out.close();
+
 				file.transferTo(new File(path));
-				//保存会员资质数据
-				Map<String,Object> paramMap = new HashMap<String,Object>();
+				// 保存会员资质数据
+				Map<String, Object> paramMap = new HashMap<String, Object>();
 				paramMap.put("memberid", member.getId());
 				paramMap.put("certid", certid);
 				paramMap.put("iconpath", fileName);
@@ -180,7 +219,7 @@ public class MemberController extends BaseController {
 			T_Ticket ticket = memberService.queryTicketByMemberId(member.getId());
 			ticket.setProcessstep("certupload");
 			memberService.updateTicketProcessStep(ticket);
-			
+
 			success(true);
 		} catch (Exception e) {
 			success(false);
@@ -189,36 +228,33 @@ public class MemberController extends BaseController {
 
 		return end();
 	}
-	
 
 	@ResponseBody
-	@RequestMapping(value="/startProcess",method=RequestMethod.POST)
-	public Object startProcess(T_Member member, HttpSession session){
+	@RequestMapping(value = "/startProcess", method = RequestMethod.POST)
+	public Object startProcess(T_Member member, HttpSession session) {
 		start();
 		try {
-			T_Member loginMember = (T_Member)session.getAttribute(Const.LOGIN_MEMBER);
-			if ( !member.getEmail().equals(loginMember.getEmail()) ) {
+			T_Member loginMember = (T_Member) session.getAttribute(Const.LOGIN_MEMBER);
+			if (!member.getEmail().equals(loginMember.getEmail())) {
 				loginMember.setEmail(member.getEmail());
 				memberService.updateMemberEmail(loginMember);
 			}
 			// 启动审批流程, 系统自动发送认证邮件
 			// 获取实名认证的流程定义
-			ProcessDefinitionQuery query =
-				repositoryService.createProcessDefinitionQuery();
-			ProcessDefinition pd = 
-				query.processDefinitionKey("cpes").latestVersion().singleResult();
-			
+			ProcessDefinitionQuery query = repositoryService.createProcessDefinitionQuery();
+			ProcessDefinition pd = query.processDefinitionKey("cpes").latestVersion().singleResult();
+
 			Map<String, Object> varMap = new HashMap<String, Object>();
 			varMap.put("useremail", loginMember.getEmail());
-			
+
 			String s = "asdlkjasdlkjsadsgjdslkhf32lkjkjfsalkjdfdslkj3";
 			String authcode = "";
-			for ( int i = 0; i < 4; i++ ) {
+			for (int i = 0; i < 4; i++) {
 				Random r = new Random();
 				int index = r.nextInt(s.length());
-				authcode = authcode + s.charAt(index); 
+				authcode = authcode + s.charAt(index);
 			}
-			
+
 			varMap.put("authcode", authcode);
 			varMap.put("userid", loginMember.getLoginacct());
 
@@ -229,31 +265,31 @@ public class MemberController extends BaseController {
 			t.setAuthcode(authcode);
 			memberService.updateTicket(t);
 			success(true);
-		} catch ( Exception e ) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			success(false);
 		}
-		
+
 		return end();
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/doApply")
-	public Object doApply( String authcode, HttpSession session ) {
+	public Object doApply(String authcode, HttpSession session) {
 		start();
-		
+
 		try {
-			T_Member loginMember = (T_Member)session.getAttribute(Const.LOGIN_MEMBER);
+			T_Member loginMember = (T_Member) session.getAttribute(Const.LOGIN_MEMBER);
 			// 获取流程审批单
 			T_Ticket t = memberService.queryTicketByMemberId(loginMember.getId());
-			
+
 			// 判断认证码是否正确
-			if ( authcode.equals(t.getAuthcode()) ) {
+			if (authcode.equals(t.getAuthcode())) {
 				// 让审批流程继续执行
 				// 完成当前会员的验证任务
 				TaskQuery query = taskService.createTaskQuery();
 				List<Task> ts = query.taskAssignee(loginMember.getLoginacct()).list();
-				for ( Task task : ts ) {
+				for (Task task : ts) {
 					taskService.complete(task.getId());
 				}
 				t.setProcessstep("confirm");
@@ -263,12 +299,12 @@ public class MemberController extends BaseController {
 				error("认证码不正确，请重新输入");
 				success(false);
 			}
-		} catch ( Exception e ) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			success(false);
 		}
-		
+
 		return end();
 	}
-	
+
 }

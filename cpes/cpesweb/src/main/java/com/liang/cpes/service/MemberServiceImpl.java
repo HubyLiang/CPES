@@ -74,4 +74,12 @@ public class MemberServiceImpl implements MemberService {
 	public void updateTicketAuthStatus(T_Ticket t_Ticket) {
 		memberDao.updateTicketAuthStatus(t_Ticket);
 	}
+
+	public int regist(T_Member member) {
+		return memberDao.regist(member);
+	}
+
+	public T_Member checkLoginAcct(String loginacct) {
+		return memberDao.checkLoginAcct(loginacct);
+	}
 }

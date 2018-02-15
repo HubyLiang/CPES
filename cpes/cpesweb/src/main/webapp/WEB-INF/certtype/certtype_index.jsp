@@ -101,15 +101,16 @@
 					}
 				}
 			    
-			    
 			});
 		    
-/* 		    for ( var acctCert in ${pageScope.requestScope.acctCerts}) {
-		    	alert("hello");
+
+	 	    /* $.each(acctCerts,function(i,acctCert){
+		    	alert(acctCert);
+		    	alert(i);
 		    	var box = $("#certTable :checkbox[data-acctype='${acctCert.acctype}'][data-certid='${acctCert.certid}']");
-	            box[0].checked = true;
-			} */
-		    
+	            box[0].checked = true; 
+		    })   */
+
 	    });		
 	    
         $("#certTable :checkbox").click(function(){
@@ -124,7 +125,8 @@
                     data : {
                         certid : certid,
                         acctype : acctype
-                    }
+                    },
+                    dataType: 'json'
                 });
             } else {
                 $.ajax({
@@ -138,14 +140,32 @@
             }
         });
         
-	    var acctCerts = "${requestScope.acctCerts}";
-	    alert(acctCerts);
+	    var acctCerts = eval('${acctCerts}');
+	    console.log(acctCerts);
+		
+		init(acctCerts);
+		
+		function init(json){
+			$.each(json,function(index,acctCert){
+				console.log(acctCert);
+				var type=acctCert.acctype;
+				var id=acctCert.certid;
+				var j="#certTable :checkbox[data-acctype="+type+"][data-certid="+id+"]";
+		    	var box = $(j);
+	            box[0].checked = true; 	
+			})
+		}
+
+        
+		  
+/*  		for(int i = 0;i<acctCerts.length;i++){
+			acctCert = acctCerts[i];
+			alert(acctCert);
+		}  */
+        
+
 	    
-	    $.each(acctCerts,function(i,acctCert){
-	    	alert(acctCert);
-	    	var box = $("#certTable :checkbox[data-acctype='${acctCert.acctype}'][data-certid='${acctCert.certid}']");
-            box[0].checked = true;
-	    })
+
 	</script>
 </body>
 </html>

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
 import com.liang.cpes.bean.AcctCert;
 import com.liang.cpes.bean.T_Cert;
 import com.liang.cpes.common.BaseController;
@@ -23,6 +24,7 @@ public class CerttypeController extends BaseController {
 	@Autowired
 	private CertService certService;
 
+	
 	@RequestMapping("/index")
 	public String index(Model model) {
 		// 查询所有资质数据
@@ -30,7 +32,11 @@ public class CerttypeController extends BaseController {
 		model.addAttribute("certs", certs);
 		// 查询账户和资质的关系数据
 		List<AcctCert> accCerts = certService.queryAccCerts();
-		model.addAttribute("acctCerts", accCerts);
+		
+		Gson gson = new Gson();
+		String accCerts_Str = gson.toJson(accCerts);
+		System.out.println(accCerts_Str);
+		model.addAttribute("acctCerts", accCerts_Str);
 		return "certtype/certtype_index";
 	}
 

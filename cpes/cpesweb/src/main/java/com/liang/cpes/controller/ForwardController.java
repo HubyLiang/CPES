@@ -47,11 +47,21 @@ public class ForwardController extends BaseController {
 		return "login";
 	}
 	
-	@RequestMapping(value="/member")
+	@RequestMapping(value="/memberindex")
 	public String member(){
 		return "member/member_index";
 	}
 
+	@RequestMapping(value="/tologin")
+	public String toLoginPage(){
+		return "login";
+	}
+	
+	@RequestMapping("/toregist")
+	public String toRegist(){
+		return "member/member_regist";
+	}
+	
 	@ResponseBody
 	@RequestMapping(value = "/memberLogin", method = RequestMethod.POST)
 	public Object memberLogin(HttpSession session, T_Member member) {
@@ -80,7 +90,12 @@ public class ForwardController extends BaseController {
 	@RequestMapping("/logout")
 	public String logout(HttpSession session){
 		session.invalidate();
-		return "redirect:/index.htm";
+		return "redirect:/indexPage.htm";
+	}
+	
+	@RequestMapping(value="/indexPage")
+	public String indexPage(){
+		return "index";
 	}
 
 	@ResponseBody

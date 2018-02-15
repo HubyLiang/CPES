@@ -96,9 +96,9 @@
 		<property name="maxInMemorySize" value="4096"/>
 	</bean>
 
-    <!--
+    
     <mvc:interceptors>
-        <bean class="com.liang.cpes.intercepter.AuthInterceptor"></bean>
+        <bean class="com.liang.cpes.interceptor.AuthInterceptor"></bean>
     </mvc:interceptors>
-     -->
+    
 </beans>
